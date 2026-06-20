@@ -143,7 +143,7 @@ if (app) {
                 <span>Learn More</span>
                 <span aria-hidden="true">→</span>
               </a>
-              <button class="split-button split-button--ghost" type="button">
+              <button class="video-button" type="button">
                 <span>Play Video</span>
                 <span aria-hidden="true">▶</span>
               </button>
