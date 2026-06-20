@@ -1,29 +1,69 @@
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron-400.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron-500.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron-600.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron-700.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/orbitron-800.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --bg: #080b0e;
-  --surface: rgba(12, 17, 19, 0.84);
-  --surface-strong: rgba(8, 12, 14, 0.94);
-  --line: rgba(255, 255, 255, 0.16);
-  --text: #f7f7f2;
-  --muted: rgba(247, 247, 242, 0.72);
-  --soft: rgba(247, 247, 242, 0.12);
-  --gold: #f2b84b;
-  --mint: #35e8a8;
-  --coral: #ff6b57;
-  --blue: #62d5ff;
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.46);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  color: var(--text);
-  background: var(--bg);
+  --ink: #031c39;
+  --ink-deep: #021933;
+  --white: #ffffff;
+  --muted-white: rgba(255, 255, 255, 0.88);
+  --purple: #31006e;
+  --purple-dark: #2a005e;
+  --gold: #c5b271;
+  --line: rgba(174, 195, 216, 0.7);
+  --line-soft: rgba(49, 117, 185, 0.46);
+  --copy-shadow: 0 0 14px rgba(7, 25, 43, 0.42);
+  font-family: "Orbitron", "Trebuchet MS", Arial, sans-serif;
+  color: var(--white);
+  background: var(--ink);
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -35,10 +75,12 @@ body,
 
 body {
   min-width: 320px;
+  overflow-x: hidden;
+  background: var(--ink);
 }
 
-.page {
-  min-height: 100vh;
+body.is-menu-open {
+  overflow: hidden;
 }
 
 a {
@@ -48,41 +90,55 @@ a {
 
 button,
 a {
+  font: inherit;
   -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+.page {
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--ink);
 }
 
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 880px;
+  padding: 34px 80px 120px;
   overflow: hidden;
   isolation: isolate;
-  padding: 32px 48px;
 }
 
 .hero__video,
 .hero__shade {
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
   width: 100%;
-  height: 100%;
+  height: 790px;
 }
 
 .hero__video {
   z-index: -3;
   object-fit: cover;
-  background: #0a0d10;
+  object-position: center top;
+  background: var(--ink);
+  filter: saturate(0.96) contrast(1.03);
 }
 
 .hero__shade {
   z-index: -2;
   background:
-    linear-gradient(90deg, rgba(2, 5, 7, 0.92) 0%, rgba(2, 5, 7, 0.68) 44%, rgba(2, 5, 7, 0.22) 100%),
-    linear-gradient(180deg, rgba(2, 5, 7, 0.68) 0%, rgba(2, 5, 7, 0.12) 45%, rgba(2, 5, 7, 0.84) 100%);
+    linear-gradient(180deg, rgba(3, 28, 57, 0.06) 0%, rgba(3, 28, 57, 0.24) 43%, var(--ink) 94%),
+    linear-gradient(90deg, rgba(3, 28, 57, 0.2) 0%, rgba(3, 28, 57, 0.05) 58%, rgba(3, 28, 57, 0.5) 100%);
 }
 
 .topbar,
 .hero__layout,
-.hero__markets {
+.markets {
   position: relative;
   z-index: 1;
 }
@@ -91,405 +147,1089 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: 48px;
+  width: 100%;
 }
 
-.brand,
-.button,
-.feed-status,
-.coin-card__badge {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-.brand {
+.kairos-logo {
   display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 9px 12px;
-  background: rgba(9, 13, 15, 0.48);
-  color: var(--text);
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.brand__mark {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  background:
-    linear-gradient(135deg, var(--gold), var(--coral) 45%, var(--mint));
-  box-shadow: 0 0 22px rgba(242, 184, 75, 0.34);
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 0 18px;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1;
-  transition:
-    transform 180ms ease,
-    border-color 180ms ease,
-    background-color 180ms ease;
-}
-
-.button:hover {
-  transform: translateY(-1px);
-}
-
-.button:focus-visible {
-  outline: 3px solid rgba(98, 213, 255, 0.44);
-  outline-offset: 3px;
-}
-
-.button--google,
-.button--secondary {
-  background: rgba(9, 13, 15, 0.58);
-}
-
-.button--google:hover,
-.button--secondary:hover {
-  border-color: rgba(255, 255, 255, 0.38);
-  background: rgba(9, 13, 15, 0.78);
-}
-
-.button--primary {
-  border-color: rgba(242, 184, 75, 0.72);
-  background: #f3f0e8;
-  color: #111417;
-}
-
-.button--primary:hover {
-  background: #ffffff;
-}
-
-.google-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1a73e8;
-  font-size: 14px;
+  align-items: flex-end;
+  min-width: 178px;
+  color: var(--white);
+  font-size: 36px;
   font-weight: 800;
+  line-height: 0.8;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  text-shadow: var(--copy-shadow);
+}
+
+.kairos-logo span {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 9px;
+}
+
+.kairos-logo span::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 7px;
+  background: currentColor;
+  content: "";
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.nav-links a {
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-links a + a::before {
+  position: absolute;
+  top: 50%;
+  left: -18px;
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.36);
+  transform: translateY(-50%);
+  content: "";
+}
+
+.menu-button {
+  display: none;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--purple);
+}
+
+.menu-button span {
+  display: block;
+  width: 22px;
+  height: 3px;
+  margin: 3px 0;
+  border-radius: 999px;
+  background: var(--white);
 }
 
 .hero__layout {
   display: grid;
-  grid-template-columns: minmax(0, 720px) 280px;
-  align-items: end;
-  gap: 56px;
-  max-width: 1200px;
-  min-height: 520px;
-  margin: 56px auto 30px;
+  grid-template-columns: minmax(0, 1fr) 425px;
+  gap: 70px;
+  align-items: start;
+  margin-top: 205px;
 }
 
 .hero__copy {
-  max-width: 720px;
-}
-
-.eyebrow {
-  margin: 0 0 18px;
-  color: var(--gold);
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0;
-}
-
-.eyebrow--compact {
-  margin-bottom: 8px;
-  color: var(--mint);
+  max-width: 1110px;
 }
 
 h1,
 h2,
-h3,
 p {
   margin-top: 0;
 }
 
-h1 {
-  max-width: 720px;
-  margin-bottom: 24px;
-  font-size: 76px;
-  line-height: 0.96;
+.hero h1 {
+  max-width: 900px;
+  margin-bottom: 54px;
+  color: var(--white);
+  font-size: 86px;
+  font-weight: 500;
+  line-height: 1.12;
+  text-transform: uppercase;
   letter-spacing: 0;
+  text-shadow: var(--copy-shadow);
+}
+
+.hero h1 span {
+  display: block;
 }
 
 .hero__lead {
-  max-width: 600px;
-  margin-bottom: 34px;
-  color: var(--muted);
-  font-size: 20px;
-  line-height: 1.55;
+  max-width: 1040px;
+  margin-bottom: 38px;
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-shadow: var(--copy-shadow);
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 40px;
 }
 
-.signal-panel {
-  display: grid;
-  gap: 0;
-  width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
+.split-button {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: minmax(150px, 1fr) 48px;
+  align-items: stretch;
+  min-width: 214px;
+  height: 54px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--white);
+  color: var(--purple);
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.signal-panel__row {
+.split-button span:first-child {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  min-height: 64px;
+  justify-content: center;
   padding: 0 18px;
-  border-bottom: 1px solid var(--line);
 }
 
-.signal-panel__row:last-child {
-  border-bottom: 0;
+.split-button span:last-child {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--purple);
+  color: var(--white);
+  font-size: 27px;
 }
 
-.signal-panel__row span {
-  color: var(--muted);
-  font-size: 13px;
+.split-button span:last-child::before {
+  position: absolute;
+  inset: 0 auto 0 -30px;
+  width: 38px;
+  background: var(--white);
+  clip-path: polygon(0 0, 100% 0, 18% 100%, 0 100%);
+  content: "";
 }
 
-.signal-panel__row strong {
+.split-button--ghost {
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background: transparent;
+  color: var(--white);
+}
+
+.split-button--ghost span:last-child::before {
+  background: var(--ink);
+}
+
+.auth-card {
+  width: 425px;
+  margin-top: 23px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--purple);
+}
+
+.auth-card h2 {
+  margin: 0;
+  padding: 37px 20px 30px;
+  border-radius: 6px 6px 0 0;
+  background: var(--purple);
+  color: var(--white);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 47px;
+  background: var(--purple);
+}
+
+.auth-tab {
+  background: var(--purple);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.auth-tab--active {
+  border-radius: 0 6px 0 0;
+  background: var(--white);
+  color: var(--purple);
+}
+
+.auth-card__body {
+  padding: 50px 39px 31px;
+  text-align: center;
+}
+
+.google-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 49px;
+  border-radius: 4px;
+  background: var(--gold);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.google-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: conic-gradient(#4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0);
+  color: var(--white);
+  font-family: Arial, sans-serif;
   font-size: 17px;
+  font-weight: 800;
 }
 
-.hero__markets {
-  max-width: 1200px;
+.auth-card__body p {
+  margin: 26px 0 28px;
+  color: #1c1c1c;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.auth-divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 31px;
+  color: rgba(28, 28, 28, 0.42);
+  font-size: 14px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  height: 1px;
+  background: rgba(28, 28, 28, 0.35);
+  content: "";
+}
+
+.create-account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 49px;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  color: var(--gold);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.markets {
+  min-height: 1180px;
+  margin-top: -48px;
+  padding: 0 80px 130px;
+}
+
+.markets__inner {
+  position: relative;
+  width: min(100%, 1540px);
+  height: 920px;
   margin: 0 auto;
 }
 
-.market-panel {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface-strong);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(20px);
+.banking-orbit {
+  position: absolute;
+  top: 172px;
+  left: 50%;
+  width: 620px;
+  height: 620px;
+  border-radius: 50%;
+  transform: translateX(-50%);
 }
 
-.market-panel__header {
-  display: flex;
+.banking-orbit span {
+  position: absolute;
+  inset: var(--ring-offset);
+  border: 1px solid var(--line-soft);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 8px rgba(31, 108, 184, 0.28));
+}
+
+.banking-orbit span:nth-child(1) {
+  --ring-offset: 0;
+}
+
+.banking-orbit span:nth-child(2) {
+  --ring-offset: 45px;
+}
+
+.banking-orbit span:nth-child(3) {
+  --ring-offset: 85px;
+}
+
+.banking-center {
+  position: absolute;
+  top: 458px;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  width: 360px;
+  transform: translateX(-50%);
+}
+
+.section-title {
+  margin-bottom: 24px;
+  color: var(--white);
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.add-crypto {
+  display: grid;
+  grid-template-columns: 1fr 32px;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 22px 22px 18px;
-  border-bottom: 1px solid var(--line);
+  width: 344px;
+  height: 45px;
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--purple);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
 }
 
-.market-panel h2 {
-  margin-bottom: 0;
+.add-crypto span:last-child {
   font-size: 28px;
-  line-height: 1.1;
-  letter-spacing: 0;
+  line-height: 1;
 }
 
 .feed-status {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-width: 142px;
-  min-height: 38px;
-  justify-content: center;
-  padding: 0 12px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 700;
+  min-height: 20px;
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-family: Arial, sans-serif;
+  font-size: 11px;
 }
 
 .feed-status__dot {
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--gold);
 }
 
 .feed-status[data-feed-status="live"] .feed-status__dot {
-  background: var(--mint);
-  box-shadow: 0 0 18px rgba(53, 232, 168, 0.68);
+  background: #65e3a3;
+  box-shadow: 0 0 14px rgba(101, 227, 163, 0.75);
 }
 
 .feed-status[data-feed-status="error"] .feed-status__dot {
-  background: var(--coral);
+  background: #ff6d6d;
 }
 
-.coin-grid {
+.coin-list {
+  position: absolute;
+  inset: 300px 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--line);
-}
-
-.coin-card {
-  min-height: 190px;
-  padding: 22px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0)),
-    #0a0e10;
-}
-
-.coin-card__top,
-.coin-card__meta {
-  display: flex;
-  align-items: center;
+  grid-template-columns: repeat(2, minmax(0, 390px));
   justify-content: space-between;
-  gap: 14px;
+  row-gap: 54px;
+  width: 100%;
 }
 
-.coin-card__symbol {
-  margin-bottom: 5px;
-  color: var(--coin-accent);
-  font-size: 13px;
+.coin-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.coin-row:nth-child(-n + 5) {
+  grid-column: 1;
+}
+
+.coin-row:nth-child(n + 6) {
+  grid-column: 2;
+}
+
+.coin-row:nth-child(1) {
+  grid-row: 1;
+}
+
+.coin-row:nth-child(2) {
+  grid-row: 2;
+}
+
+.coin-row:nth-child(3) {
+  grid-row: 3;
+}
+
+.coin-row:nth-child(4) {
+  grid-row: 4;
+}
+
+.coin-row:nth-child(5) {
+  grid-row: 5;
+}
+
+.coin-row:nth-child(6) {
+  grid-row: 1;
+}
+
+.coin-row:nth-child(7) {
+  grid-row: 2;
+}
+
+.coin-row:nth-child(8) {
+  grid-row: 3;
+}
+
+.coin-row:nth-child(9) {
+  grid-row: 4;
+}
+
+.coin-row:nth-child(10) {
+  grid-row: 5;
+}
+
+.coin-icon {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  color: var(--white);
+  font-family: Arial, sans-serif;
+  font-size: 18px;
   font-weight: 800;
+  line-height: 1;
 }
 
-.coin-card h3 {
-  margin-bottom: 0;
-  font-size: 20px;
-  line-height: 1.15;
+.coin-icon[data-icon="BTC"] {
+  background: #f6a300;
 }
 
-.coin-card__badge {
-  flex: 0 0 auto;
-  padding: 7px 9px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
+.coin-icon[data-icon="ETH"] {
+  background: linear-gradient(135deg, #e7e8ff, #5d6599 62%, #283052);
 }
 
-.coin-card__price {
-  min-height: 46px;
-  margin: 26px 0 18px;
-  color: var(--text);
-  font-size: 38px;
-  font-weight: 800;
-  line-height: 1.1;
+.coin-icon[data-icon="SOL"] {
+  background: linear-gradient(135deg, #38f6bd, #7a5cff 55%, #252d69);
 }
 
-.coin-card[data-trend="up"] .coin-card__price {
-  color: var(--mint);
+.coin-icon[data-icon="XRP"] {
+  background: #33383b;
 }
 
-.coin-card[data-trend="down"] .coin-card__price {
-  color: var(--coral);
+.coin-icon[data-icon="USDC"] {
+  background: #2871b7;
 }
 
-.coin-card__meta {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.4;
+.coin-icon[data-icon="BNB"] {
+  background: #e9c629;
 }
 
-@media (max-width: 980px) {
+.coin-icon[data-icon="MID"] {
+  background: #080b0f;
+  border: 2px solid #27313a;
+}
+
+.coin-icon[data-icon="DOGE"] {
+  background: #d5b33f;
+}
+
+.coin-icon[data-icon="SUI"] {
+  border-radius: 4px;
+  background: #7ac8e9;
+}
+
+.coin-icon[data-icon="USDT"] {
+  background: #00a884;
+}
+
+.coin-price {
+  white-space: nowrap;
+}
+
+.coin-row:nth-child(-n + 5) .coin-icon {
+  order: 3;
+}
+
+.coin-row:nth-child(-n + 5) .coin-name {
+  order: 2;
+  text-align: right;
+}
+
+.coin-row:nth-child(-n + 5) .coin-price {
+  order: 1;
+  text-align: right;
+}
+
+.tech-line {
+  position: absolute;
+  border-color: var(--line);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.tech-line::before,
+.tech-line::after {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--line);
+  content: "";
+}
+
+.tech-line--top {
+  top: 130px;
+  left: 70px;
+  width: 420px;
+  height: 220px;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  border-radius: 30px 0 0 0;
+  transform: skewY(-4deg);
+}
+
+.tech-line--top::before {
+  top: -6px;
+  right: -6px;
+}
+
+.tech-line--top::after {
+  bottom: -6px;
+  left: -6px;
+}
+
+.tech-line--bottom {
+  right: 95px;
+  bottom: 30px;
+  width: 620px;
+  height: 210px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0 0 26px 0;
+  transform: skewY(-2deg);
+}
+
+.tech-line--bottom::before {
+  top: -6px;
+  right: -6px;
+}
+
+.tech-line--bottom::after {
+  bottom: -6px;
+  left: -6px;
+}
+
+.menu-panel[hidden] {
+  display: none;
+}
+
+.menu-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+}
+
+.menu-panel__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(1, 13, 28, 0.42);
+}
+
+.menu-panel__content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: 63%;
+  min-width: 680px;
+  height: 100%;
+  padding: 76px 118px;
+  background: var(--ink);
+}
+
+.kairos-logo--menu {
+  margin-bottom: 470px;
+  font-size: 58px;
+}
+
+.kairos-logo--menu span {
+  padding-bottom: 14px;
+}
+
+.kairos-logo--menu span::after {
+  height: 10px;
+}
+
+.menu-close {
+  position: absolute;
+  top: 65px;
+  right: 119px;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: var(--white);
+  font-size: 74px;
+  font-weight: 300;
+  line-height: 0.8;
+}
+
+.menu-panel__content > a:not(.kairos-logo) {
+  width: fit-content;
+  margin: 0 auto 64px;
+  color: var(--white);
+  font-size: 31px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1200px) {
   .hero {
-    padding: 24px;
+    min-height: 1190px;
+    padding: 34px 64px 80px;
+  }
+
+  .hero__video,
+  .hero__shade {
+    height: 1080px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .menu-button {
+    display: grid;
+  }
+
+  .kairos-logo {
+    font-size: 37px;
   }
 
   .hero__layout {
     grid-template-columns: 1fr;
-    gap: 28px;
-    min-height: 480px;
-    margin-top: 44px;
+    gap: 60px;
+    margin-top: 154px;
   }
 
-  h1 {
-    max-width: 620px;
-    font-size: 54px;
+  .hero h1 {
+    max-width: 670px;
+    margin-bottom: 42px;
+    font-size: 68px;
+    line-height: 1.13;
   }
 
   .hero__lead {
+    max-width: 690px;
+    margin-bottom: 42px;
     font-size: 18px;
+    line-height: 1.28;
   }
 
-  .signal-panel {
-    max-width: 440px;
+  .auth-card {
+    width: min(100%, 692px);
+    margin: -4px 0 0;
   }
 
-  .coin-grid {
-    grid-template-columns: 1fr;
+  .auth-card h2 {
+    padding-top: 36px;
+    font-size: 27px;
   }
 
-  .coin-card {
-    min-height: 156px;
+  .auth-tabs {
+    height: 48px;
+  }
+
+  .auth-tab:first-child::before {
+    content: "Personal";
+    font-size: 15px;
+  }
+
+  .auth-tab:first-child {
+    font-size: 0;
+  }
+
+  .auth-tab:last-child::before {
+    content: "Business";
+    font-size: 15px;
+  }
+
+  .auth-tab:last-child {
+    font-size: 0;
+  }
+
+  .auth-card__body {
+    padding: 52px 118px 50px;
+  }
+
+  .markets {
+    min-height: 1260px;
+    margin-top: 0;
+    padding: 70px 64px 130px;
+  }
+
+  .markets__inner {
+    height: 1150px;
+  }
+
+  .banking-orbit {
+    top: 120px;
+    width: 610px;
+    height: 610px;
+  }
+
+  .banking-center {
+    top: 400px;
+  }
+
+  .coin-list {
+    inset: 780px 0 auto;
+    row-gap: 45px;
+  }
+
+  .tech-line--top {
+    top: 20px;
+    left: 0;
+    width: 500px;
+  }
+
+  .tech-line--bottom {
+    right: 0;
+    bottom: 10px;
+    width: 620px;
+  }
+
+  .menu-panel__content {
+    width: 63%;
+    min-width: 0;
+    padding: 0;
+  }
+
+  .kairos-logo--menu {
+    display: none;
+  }
+
+  .menu-close {
+    top: 62px;
+    right: 84px;
+  }
+
+  .menu-panel__content > a:not(.kairos-logo) {
+    margin: 0 auto 70px;
+    font-size: 31px;
+  }
+
+  .menu-panel__content > a:nth-of-type(2) {
+    margin-top: 514px;
   }
 }
 
 @media (max-width: 640px) {
   .hero {
-    padding: 18px;
+    min-height: 1235px;
+    padding: 34px 20px 60px;
+  }
+
+  .hero__video,
+  .hero__shade {
+    height: 860px;
+  }
+
+  .hero__video {
+    object-position: 52% top;
+  }
+
+  .hero__shade {
+    background:
+      linear-gradient(180deg, rgba(3, 28, 57, 0.05) 0%, rgba(3, 28, 57, 0.18) 42%, var(--ink) 98%),
+      linear-gradient(90deg, rgba(3, 28, 57, 0.22), rgba(3, 28, 57, 0.07));
   }
 
   .topbar {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 10px;
+    gap: 18px;
   }
 
-  .brand,
-  .button--google {
-    width: 100%;
+  .kairos-logo {
+    min-width: 124px;
+    font-size: 24px;
+    letter-spacing: -1px;
+  }
+
+  .kairos-logo span {
+    padding-bottom: 6px;
+  }
+
+  .kairos-logo span::after {
+    height: 5px;
+  }
+
+  .menu-button {
+    width: 49px;
+    height: 49px;
+  }
+
+  .menu-button span {
+    width: 21px;
+    height: 3px;
+    margin: 2px 0;
   }
 
   .hero__layout {
-    min-height: 430px;
-    margin-top: 42px;
+    gap: 58px;
+    margin-top: 133px;
   }
 
-  h1 {
-    font-size: 40px;
-    line-height: 1;
+  .hero h1 {
+    max-width: 337px;
+    margin-bottom: 44px;
+    font-size: 39px;
+    line-height: 1.18;
   }
 
   .hero__lead {
-    margin-bottom: 24px;
-    font-size: 16px;
+    max-width: 334px;
+    margin-bottom: 39px;
+    font-size: 17px;
+    line-height: 1.25;
   }
 
-  .button {
-    width: 100%;
-  }
-
-  .market-panel__header,
-  .coin-card__top,
-  .coin-card__meta {
-    align-items: flex-start;
+  .hero__actions {
     flex-direction: column;
+    gap: 21px;
+    width: 216px;
   }
 
-  .market-panel__header {
-    padding: 18px;
+  .split-button {
+    width: 216px;
+    min-width: 216px;
+  }
+
+  .split-button--ghost {
+    width: 216px;
+  }
+
+  .auth-card {
+    width: 100%;
+    margin-top: 3px;
+    border-radius: 7px;
+  }
+
+  .auth-card h2 {
+    padding: 34px 12px 31px;
+    font-size: 25px;
+  }
+
+  .auth-tabs {
+    height: 49px;
+  }
+
+  .auth-tab {
+    font-size: 15px;
+  }
+
+  .auth-card__body {
+    padding: 51px 31px 43px;
+  }
+
+  .google-login,
+  .create-account {
+    height: 51px;
+  }
+
+  .markets {
+    min-height: 780px;
+    padding: 23px 20px 56px;
+  }
+
+  .markets__inner {
+    height: 700px;
+  }
+
+  .banking-orbit {
+    display: none;
+  }
+
+  .banking-center {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin: 8px auto 33px;
+    transform: none;
+  }
+
+  .section-title {
+    margin-bottom: 21px;
+    font-size: 25px;
+  }
+
+  .add-crypto {
+    width: 100%;
+    height: 49px;
+    font-size: 15px;
   }
 
   .feed-status {
+    display: none;
+  }
+
+  .coin-list {
+    position: relative;
+    inset: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+    row-gap: 29px;
+  }
+
+  .coin-row,
+  .coin-row:nth-child(-n + 5),
+  .coin-row:nth-child(n + 6) {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 12px;
+    font-size: 16px;
+  }
+
+  .coin-row:nth-child(-n + 5) {
+    grid-column: 1;
+  }
+
+  .coin-row:nth-child(n + 6) {
+    grid-column: 2;
+  }
+
+  .coin-row:nth-child(1),
+  .coin-row:nth-child(6) {
+    grid-row: 1;
+  }
+
+  .coin-row:nth-child(2),
+  .coin-row:nth-child(7) {
+    grid-row: 2;
+  }
+
+  .coin-row:nth-child(3),
+  .coin-row:nth-child(8) {
+    grid-row: 3;
+  }
+
+  .coin-row:nth-child(4),
+  .coin-row:nth-child(9) {
+    grid-row: 4;
+  }
+
+  .coin-row:nth-child(5),
+  .coin-row:nth-child(10) {
+    grid-row: 5;
+  }
+
+  .coin-row:nth-child(-n + 5) .coin-icon,
+  .coin-row:nth-child(-n + 5) .coin-name,
+  .coin-row:nth-child(-n + 5) .coin-price {
+    order: initial;
+    text-align: left;
+  }
+
+  .coin-icon {
+    grid-row: span 2;
+    width: 33px;
+    height: 33px;
+  }
+
+  .coin-name {
+    align-self: end;
+  }
+
+  .coin-price {
+    align-self: start;
+    grid-column: 2;
+    font-size: 14px;
+  }
+
+  .tech-line--top {
+    top: -36px;
+    left: -22px;
+    width: 264px;
+    height: 78px;
+  }
+
+  .tech-line--bottom {
+    right: -22px;
+    bottom: -8px;
+    width: 300px;
+    height: 136px;
+  }
+
+  .menu-panel__scrim {
+    display: none;
+  }
+
+  .menu-panel__content {
+    left: 0;
     width: 100%;
+    min-width: 0;
+    padding: 82px 38px;
   }
 
-  .coin-card {
-    padding: 18px;
+  .kairos-logo--menu {
+    display: inline-flex;
+    margin-bottom: 310px;
+    font-size: 37px;
   }
 
-  .coin-card__price {
-    font-size: 32px;
+  .kairos-logo--menu span {
+    padding-bottom: 8px;
+  }
+
+  .kairos-logo--menu span::after {
+    height: 6px;
+  }
+
+  .menu-close {
+    top: 58px;
+    right: 40px;
+    width: 92px;
+    height: 92px;
+    font-size: 72px;
+  }
+
+  .menu-panel__content > a:not(.kairos-logo) {
+    margin: 0 0 74px;
+    font-size: 29px;
+    text-align: left;
+  }
+
+  .menu-panel__content > a:nth-of-type(2) {
+    margin-top: 0;
   }
 }

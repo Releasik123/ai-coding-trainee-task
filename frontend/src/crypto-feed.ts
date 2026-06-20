@@ -9,21 +9,30 @@ export type PriceUpdate = {
 };
 
 type TickerMessage = {
-  type?: string;
-  product_id?: string;
-  price?: string;
-  best_bid?: string;
-  best_ask?: string;
-  time?: string;
+  stream?: string;
+  data?: {
+    e?: string;
+    E?: number;
+    s?: string;
+    c?: string;
+    b?: string;
+    a?: string;
+  };
+};
+
+export type FeedInstrument = {
+  productId: string;
+  streamSymbol: string;
+  invert?: boolean;
 };
 
 type CryptoFeedOptions = {
-  productIds: readonly string[];
+  instruments: readonly FeedInstrument[];
   onPrice: (update: PriceUpdate) => void;
   onStatus: (status: FeedStatus) => void;
 };
 
-const COINBASE_WS_URL = 'wss://ws-feed.exchange.coinbase.com';
+const BINANCE_WS_URL = 'wss://stream.binance.com:443/stream?streams=';
 const MAX_RECONNECT_DELAY_MS = 10_000;
 
 export class CryptoFeed {
@@ -46,17 +55,6 @@ export class CryptoFeed {
   stop(): void {
     this.stopped = true;
     window.clearTimeout(this.reconnectTimer);
-
-    if (this.socket?.readyState === WebSocket.OPEN) {
-      this.socket.send(
-        JSON.stringify({
-          type: 'unsubscribe',
-          product_ids: this.options.productIds,
-          channels: ['ticker'],
-        }),
-      );
-    }
-
     this.socket?.close();
     this.socket = null;
     this.reconnectAttempt = 0;
@@ -65,18 +63,11 @@ export class CryptoFeed {
 
   private connect(): void {
     this.options.onStatus(this.reconnectAttempt === 0 ? 'connecting' : 'reconnecting');
-    this.socket = new WebSocket(COINBASE_WS_URL);
+    this.socket = new WebSocket(this.getStreamUrl());
 
     this.socket.addEventListener('open', () => {
       this.reconnectAttempt = 0;
       this.options.onStatus('live');
-      this.socket?.send(
-        JSON.stringify({
-          type: 'subscribe',
-          product_ids: this.options.productIds,
-          channels: ['ticker'],
-        }),
-      );
     });
 
     this.socket.addEventListener('message', (event) => {
@@ -104,22 +95,27 @@ export class CryptoFeed {
       return;
     }
 
-    if (message.type !== 'ticker' || !message.product_id || !message.price) {
+    const payload = message.data;
+
+    if (payload?.e !== '24hrTicker' || !payload.s || !payload.c) {
       return;
     }
 
-    const price = Number(message.price);
+    const instruments = this.options.instruments.filter((item) => item.streamSymbol === payload.s);
+    const price = Number(payload.c);
 
-    if (!Number.isFinite(price)) {
+    if (!Number.isFinite(price) || instruments.length === 0) {
       return;
     }
 
-    this.options.onPrice({
-      productId: message.product_id,
-      price,
-      bid: parseOptionalNumber(message.best_bid),
-      ask: parseOptionalNumber(message.best_ask),
-      time: message.time,
+    instruments.forEach((instrument) => {
+      this.options.onPrice({
+        productId: instrument.productId,
+        price: instrument.invert ? 1 / price : price,
+        bid: parseOptionalNumber(payload.b),
+        ask: parseOptionalNumber(payload.a),
+        time: payload.E ? new Date(payload.E).toISOString() : undefined,
+      });
     });
   }
 
@@ -128,6 +124,14 @@ export class CryptoFeed {
     this.reconnectAttempt += 1;
     this.options.onStatus('reconnecting');
     this.reconnectTimer = window.setTimeout(() => this.connect(), delay);
+  }
+
+  private getStreamUrl(): string {
+    const streams = Array.from(new Set(this.options.instruments.map((item) => item.streamSymbol.toLowerCase())))
+      .map((symbol) => `${symbol}@ticker`)
+      .join('/');
+
+    return `${BINANCE_WS_URL}${streams}`;
   }
 }
 

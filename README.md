@@ -5,7 +5,7 @@ Fullstack test task for a Trainee Dev: AI-Powered Coding position.
 - Frontend: Vite, TypeScript, plain CSS, no UI framework.
 - Backend: Python FastAPI.
 - Auth: Google OAuth2, no database, no persistent server sessions.
-- Market data: public Coinbase WebSocket feed.
+- Market data: public Binance WebSocket streams.
 - Deployment target: one Render Web Service.
 
 ## Public URL
@@ -141,6 +141,5 @@ Production acceptance checklist:
 - Hero video autoplays muted.
 - Google button opens Google OAuth consent screen.
 - OAuth callback returns the success page.
-- Crypto prices update through the Coinbase WebSocket feed.
+- Crypto prices update through the Binance WebSocket feed.
 - GitHub Actions CI passes.
-

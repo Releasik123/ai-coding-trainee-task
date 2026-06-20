@@ -2,17 +2,17 @@ import type { FeedStatus, PriceUpdate } from './crypto-feed';
 
 export type CoinDefinition = {
   productId: string;
+  streamSymbol?: string;
   symbol: string;
   name: string;
-  accent: string;
+  icon: string;
   decimals: number;
+  fallbackPrice: number;
 };
 
 type CoinElements = {
-  card: HTMLElement;
+  item: HTMLElement;
   price: HTMLElement;
-  meta: HTMLElement;
-  spread: HTMLElement;
 };
 
 const statusLabels: Record<FeedStatus, string> = {
@@ -25,54 +25,47 @@ const statusLabels: Record<FeedStatus, string> = {
 
 export function createCryptoTicker(root: HTMLElement, coins: readonly CoinDefinition[]) {
   root.innerHTML = `
-    <section class="market-panel" aria-label="Realtime crypto prices">
-      <div class="market-panel__header">
-        <div>
-          <p class="eyebrow eyebrow--compact">Market feed</p>
-          <h2>Realtime prices</h2>
-        </div>
-        <p class="feed-status" data-feed-status="connecting" aria-live="polite">
-          <span class="feed-status__dot" aria-hidden="true"></span>
-          <span data-feed-status-label>Connecting</span>
-        </p>
-      </div>
-      <div class="coin-grid"></div>
-    </section>
+    <div class="banking-orbit" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="banking-center">
+      <p class="section-title">Online Banking</p>
+      <a class="add-crypto" href="#markets">
+        <span>Add a Cryptocurrency</span>
+        <span aria-hidden="true">›</span>
+      </a>
+      <p class="feed-status" data-feed-status="connecting" aria-live="polite">
+        <span class="feed-status__dot" aria-hidden="true"></span>
+        <span data-feed-status-label>Connecting</span>
+      </p>
+    </div>
+    <div class="coin-list" aria-label="Realtime crypto prices"></div>
+    <div class="tech-line tech-line--top" aria-hidden="true"></div>
+    <div class="tech-line tech-line--bottom" aria-hidden="true"></div>
   `;
 
-  const grid = root.querySelector<HTMLElement>('.coin-grid');
+  const list = root.querySelector<HTMLElement>('.coin-list');
   const status = root.querySelector<HTMLElement>('.feed-status');
   const statusLabel = root.querySelector<HTMLElement>('[data-feed-status-label]');
   const elements = new Map<string, CoinElements>();
-  const lastPrices = new Map<string, number>();
 
-  if (grid) {
+  if (list) {
     coins.forEach((coin) => {
-      const card = document.createElement('article');
-      card.className = 'coin-card';
-      card.style.setProperty('--coin-accent', coin.accent);
-      card.dataset.productId = coin.productId;
-      card.innerHTML = `
-        <div class="coin-card__top">
-          <div>
-            <p class="coin-card__symbol">${coin.symbol}</p>
-            <h3>${coin.name}</h3>
-          </div>
-          <span class="coin-card__badge">${coin.productId}</span>
-        </div>
-        <p class="coin-card__price" data-price>--</p>
-        <div class="coin-card__meta">
-          <span data-meta>Waiting for first tick</span>
-          <span data-spread>Spread --</span>
-        </div>
+      const item = document.createElement('article');
+      item.className = 'coin-row';
+      item.dataset.productId = coin.productId;
+      item.innerHTML = `
+        <span class="coin-icon" data-icon="${coin.symbol}">${coin.icon}</span>
+        <span class="coin-name">${coin.name}</span>
+        <span class="coin-price" data-price>${formatPrice(coin.fallbackPrice, coin.decimals)}</span>
       `;
-      grid.append(card);
+      list.append(item);
 
       elements.set(coin.productId, {
-        card,
-        price: card.querySelector<HTMLElement>('[data-price]') as HTMLElement,
-        meta: card.querySelector<HTMLElement>('[data-meta]') as HTMLElement,
-        spread: card.querySelector<HTMLElement>('[data-spread]') as HTMLElement,
+        item,
+        price: item.querySelector<HTMLElement>('[data-price]') as HTMLElement,
       });
     });
   }
@@ -95,14 +88,8 @@ export function createCryptoTicker(root: HTMLElement, coins: readonly CoinDefini
       return;
     }
 
-    const previous = lastPrices.get(update.productId);
-    const trend = previous === undefined ? 'flat' : update.price > previous ? 'up' : update.price < previous ? 'down' : 'flat';
-
-    refs.card.dataset.trend = trend;
+    refs.item.dataset.updated = 'true';
     refs.price.textContent = formatPrice(update.price, coin.decimals);
-    refs.meta.textContent = update.time ? `Updated ${formatTime(update.time)}` : 'Updated now';
-    refs.spread.textContent = formatSpread(update.bid, update.ask);
-    lastPrices.set(update.productId, update.price);
   }
 
   return { setStatus, updatePrice };
@@ -112,29 +99,7 @@ function formatPrice(value: number, maximumFractionDigits: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: maximumFractionDigits >= 3 ? 3 : 2,
     maximumFractionDigits,
   }).format(value);
-}
-
-function formatTime(value: string): string {
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return 'now';
-  }
-
-  return new Intl.DateTimeFormat('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  }).format(date);
-}
-
-function formatSpread(bid: number | undefined, ask: number | undefined): string {
-  if (bid === undefined || ask === undefined) {
-    return 'Spread --';
-  }
-
-  return `Spread ${formatPrice(Math.max(ask - bid, 0), 2)}`;
 }
