@@ -187,6 +187,9 @@ body.is-loaded .hero__video {
   position: absolute;
   inset: 0 0 auto;
   width: 100%;
+}
+
+.hero__video {
   height: 790px;
 }
 
@@ -200,8 +203,9 @@ body.is-loaded .hero__video {
 
 .hero__shade {
   z-index: -2;
+  height: 900px;
   background:
-    linear-gradient(180deg, rgba(3, 28, 57, 0.06) 0%, rgba(3, 28, 57, 0.24) 43%, var(--ink) 94%),
+    linear-gradient(180deg, rgba(3, 28, 57, 0.06) 0%, rgba(3, 28, 57, 0.24) 43%, var(--ink) 82%, var(--ink) 100%),
     linear-gradient(90deg, rgba(3, 28, 57, 0.2) 0%, rgba(3, 28, 57, 0.05) 58%, rgba(3, 28, 57, 0.5) 100%);
 }
 
@@ -395,6 +399,8 @@ p {
 }
 
 .video-button {
+  --video-wedge-width: 92px;
+
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 58px;
@@ -413,12 +419,26 @@ p {
     box-shadow 180ms ease;
 }
 
+.video-button::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: var(--video-wedge-width);
+  background: var(--white);
+  clip-path: polygon(38% 0, 100% 0, 100% 100%, 0 100%);
+  content: "";
+}
+
 .video-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(49, 0, 110, 0.22);
 }
 
 .video-button span:first-child {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   padding: 0 20px;
@@ -427,8 +447,9 @@ p {
 
 .video-button span:last-child {
   position: relative;
+  z-index: 1;
   display: block;
-  background: var(--white);
+  background: transparent;
   color: transparent;
   font-size: 0;
 }
@@ -1053,9 +1074,12 @@ body.is-loaded .banking-orbit.is-visible span {
     padding: 34px 64px 80px;
   }
 
-  .hero__video,
-  .hero__shade {
+  .hero__video {
     height: 1080px;
+  }
+
+  .hero__shade {
+    height: 1200px;
   }
 
   .nav-links {
@@ -1194,9 +1218,12 @@ body.is-loaded .banking-orbit.is-visible span {
     padding: 34px 20px 60px;
   }
 
-  .hero__video,
-  .hero__shade {
+  .hero__video {
     height: 860px;
+  }
+
+  .hero__shade {
+    height: 960px;
   }
 
   .hero__video {
@@ -1205,7 +1232,7 @@ body.is-loaded .banking-orbit.is-visible span {
 
   .hero__shade {
     background:
-      linear-gradient(180deg, rgba(3, 28, 57, 0.05) 0%, rgba(3, 28, 57, 0.18) 42%, var(--ink) 98%),
+      linear-gradient(180deg, rgba(3, 28, 57, 0.05) 0%, rgba(3, 28, 57, 0.18) 42%, var(--ink) 82%, var(--ink) 100%),
       linear-gradient(90deg, rgba(3, 28, 57, 0.22), rgba(3, 28, 57, 0.07));
   }
 
@@ -1269,6 +1296,8 @@ body.is-loaded .banking-orbit.is-visible span {
   }
 
   .video-button {
+    --video-wedge-width: 76px;
+
     width: 216px;
     min-width: 216px;
     grid-template-columns: minmax(0, 1fr) 58px;
