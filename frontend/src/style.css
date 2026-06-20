@@ -371,7 +371,7 @@ p {
   align-items: center;
   justify-content: center;
   padding: 0 18px;
-  line-height: 1;
+  line-height: 1.35;
 }
 
 .split-button span:last-child {
@@ -411,17 +411,16 @@ p {
 }
 
 .split-button--ghost span:last-child::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 0;
   height: 0;
-  margin-left: 3px;
   border-top: 11px solid transparent;
   border-bottom: 11px solid transparent;
   border-left: 17px solid var(--purple);
+  transform: translate(-35%, -50%);
   content: "";
-}
-
-.split-button--ghost span:first-child {
-  padding-top: 2px;
 }
 
 .auth-card {
