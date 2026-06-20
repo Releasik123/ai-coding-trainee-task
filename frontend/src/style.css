@@ -395,15 +395,16 @@ p {
 }
 
 .split-button--ghost {
-  grid-template-columns: minmax(148px, 1fr) 66px;
+  grid-template-columns: minmax(202px, 1fr) 48px;
+  min-width: 270px;
   border: 1px solid rgba(255, 255, 255, 0.82);
   background: transparent;
   color: var(--white);
 }
 
 .split-button--ghost span:first-child {
-  padding: 4px 12px 0 22px;
-  line-height: 1.9;
+  padding: 0 18px;
+  line-height: 1.5;
   overflow: visible;
 }
 
@@ -411,17 +412,18 @@ p {
   background: var(--white);
   color: var(--purple);
   font-size: 0;
-  clip-path: polygon(38% 0, 100% 0, 100% 100%, 0 100%);
 }
 
 .split-button--ghost span:last-child::before {
-  content: none;
+  background: var(--white);
+  clip-path: polygon(0 0, 100% 0, 18% 100%, 0 100%);
+  content: "";
 }
 
 .split-button--ghost span:last-child::after {
   position: absolute;
   top: 50%;
-  left: 72%;
+  left: 50%;
   width: 0;
   height: 0;
   border-top: 11px solid transparent;
