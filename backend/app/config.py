@@ -1,6 +1,10 @@
 import os
 from dataclasses import dataclass
 from functools import lru_cache
+from pathlib import Path
+
+
+ROOT_ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
 
 
 @dataclass(frozen=True)
@@ -27,6 +31,8 @@ class Settings:
 
 @lru_cache
 def get_settings() -> Settings:
+    load_env_file(ROOT_ENV_FILE)
+
     app_base_url = os.getenv("APP_BASE_URL", "http://localhost:8000").rstrip("/")
     frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
     allowed_origins = parse_allowed_origins(
@@ -50,3 +56,21 @@ def parse_allowed_origins(value: str | None, defaults: tuple[str, ...]) -> tuple
 
     return tuple(origin.strip().rstrip("/") for origin in value.split(",") if origin.strip())
 
+
+def load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+
+        key, raw_value = stripped.split("=", 1)
+        key = key.strip()
+
+        if not key or key in os.environ:
+            continue
+
+        os.environ[key] = raw_value.strip().strip("\"'")
