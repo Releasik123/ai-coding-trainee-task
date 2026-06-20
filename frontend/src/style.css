@@ -371,6 +371,7 @@ p {
   align-items: center;
   justify-content: center;
   padding: 0 18px;
+  line-height: 1;
 }
 
 .split-button span:last-child {
@@ -381,6 +382,7 @@ p {
   background: var(--purple);
   color: var(--white);
   font-size: 27px;
+  line-height: 1;
 }
 
 .split-button span:last-child::before {
@@ -401,10 +403,25 @@ p {
 .split-button--ghost span:last-child {
   background: var(--white);
   color: var(--purple);
+  font-size: 0;
 }
 
 .split-button--ghost span:last-child::before {
   background: var(--ink);
+}
+
+.split-button--ghost span:last-child::after {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 17px solid var(--purple);
+  content: "";
+}
+
+.split-button--ghost span:first-child {
+  padding-top: 2px;
 }
 
 .auth-card {
