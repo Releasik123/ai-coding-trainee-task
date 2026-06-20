@@ -31,7 +31,7 @@ export function createCryptoTicker(root: HTMLElement, coins: readonly CoinDefini
           <p class="eyebrow eyebrow--compact">Market feed</p>
           <h2>Realtime prices</h2>
         </div>
-        <p class="feed-status" data-feed-status="connecting">
+        <p class="feed-status" data-feed-status="connecting" aria-live="polite">
           <span class="feed-status__dot" aria-hidden="true"></span>
           <span data-feed-status-label>Connecting</span>
         </p>

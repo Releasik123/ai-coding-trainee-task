@@ -46,8 +46,20 @@ export class CryptoFeed {
   stop(): void {
     this.stopped = true;
     window.clearTimeout(this.reconnectTimer);
+
+    if (this.socket?.readyState === WebSocket.OPEN) {
+      this.socket.send(
+        JSON.stringify({
+          type: 'unsubscribe',
+          product_ids: this.options.productIds,
+          channels: ['ticker'],
+        }),
+      );
+    }
+
     this.socket?.close();
     this.socket = null;
+    this.reconnectAttempt = 0;
     this.options.onStatus('offline');
   }
 
