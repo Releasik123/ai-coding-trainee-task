@@ -105,6 +105,72 @@ button {
   background: var(--ink);
 }
 
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+}
+
+.page-curtain::before,
+.page-curtain::after {
+  position: absolute;
+  top: 0;
+  width: 50.5%;
+  height: 100%;
+  background:
+    linear-gradient(180deg, rgba(49, 0, 110, 0.22), rgba(3, 28, 57, 0.82)),
+    var(--ink);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.36);
+  content: "";
+}
+
+.page-curtain::before {
+  left: 0;
+}
+
+.page-curtain::after {
+  right: 0;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+}
+
+.reveal--line {
+  transform: translate3d(0, 0.42em, 0);
+}
+
+body.is-loaded .page-curtain::before {
+  animation: curtain-open-left 1150ms cubic-bezier(0.74, 0, 0.22, 1) forwards;
+}
+
+body.is-loaded .page-curtain::after {
+  animation: curtain-open-right 1150ms cubic-bezier(0.74, 0, 0.22, 1) forwards;
+}
+
+body.is-loaded .page-curtain {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 220ms ease 1180ms,
+    visibility 0s linear 1400ms;
+}
+
+body.is-loaded .reveal.is-visible {
+  animation: reveal-up 860ms cubic-bezier(0.2, 0.82, 0.18, 1) var(--reveal-delay, 0ms) forwards;
+}
+
+body.is-loaded .hero__video {
+  animation: hero-drift 18000ms ease-out forwards;
+}
+
 .hero {
   position: relative;
   min-height: 880px;
@@ -287,6 +353,14 @@ p {
   color: var(--purple);
   font-size: 16px;
   font-weight: 600;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.split-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(49, 0, 110, 0.22);
 }
 
 .split-button span:first-child {
@@ -464,6 +538,10 @@ p {
   border: 1px solid var(--line-soft);
   border-radius: 50%;
   filter: drop-shadow(0 0 8px rgba(31, 108, 184, 0.28));
+}
+
+body.is-loaded .banking-orbit.is-visible span {
+  animation: orbit-pulse 4200ms ease-in-out infinite;
 }
 
 .banking-orbit span:nth-child(1) {
@@ -771,6 +849,7 @@ p {
   height: 100%;
   padding: 76px 118px;
   background: var(--ink);
+  animation: menu-slide-in 380ms cubic-bezier(0.2, 0.82, 0.18, 1) forwards;
 }
 
 .kairos-logo--menu {
@@ -811,6 +890,94 @@ p {
   line-height: 1;
   text-align: center;
   text-transform: uppercase;
+}
+
+@keyframes curtain-open-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-104%);
+  }
+}
+
+@keyframes curtain-open-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(104%);
+  }
+}
+
+@keyframes reveal-up {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-drift {
+  0% {
+    transform: scale(1.035);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes orbit-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.012);
+  }
+}
+
+@keyframes menu-slide-in {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+
+  .page-curtain {
+    display: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 @media (max-width: 1200px) {

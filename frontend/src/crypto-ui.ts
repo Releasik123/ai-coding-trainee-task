@@ -25,12 +25,12 @@ const statusLabels: Record<FeedStatus, string> = {
 
 export function createCryptoTicker(root: HTMLElement, coins: readonly CoinDefinition[]) {
   root.innerHTML = `
-    <div class="banking-orbit" aria-hidden="true">
+    <div class="banking-orbit reveal" aria-hidden="true">
       <span></span>
       <span></span>
       <span></span>
     </div>
-    <div class="banking-center">
+    <div class="banking-center reveal">
       <p class="section-title">Online Banking</p>
       <a class="add-crypto" href="#markets">
         <span>Add a Cryptocurrency</span>
@@ -42,8 +42,8 @@ export function createCryptoTicker(root: HTMLElement, coins: readonly CoinDefini
       </p>
     </div>
     <div class="coin-list" aria-label="Realtime crypto prices"></div>
-    <div class="tech-line tech-line--top" aria-hidden="true"></div>
-    <div class="tech-line tech-line--bottom" aria-hidden="true"></div>
+    <div class="tech-line tech-line--top reveal" aria-hidden="true"></div>
+    <div class="tech-line tech-line--bottom reveal" aria-hidden="true"></div>
   `;
 
   const list = root.querySelector<HTMLElement>('.coin-list');
@@ -52,9 +52,10 @@ export function createCryptoTicker(root: HTMLElement, coins: readonly CoinDefini
   const elements = new Map<string, CoinElements>();
 
   if (list) {
-    coins.forEach((coin) => {
+    coins.forEach((coin, index) => {
       const item = document.createElement('article');
-      item.className = 'coin-row';
+      item.className = 'coin-row reveal';
+      item.style.setProperty('--reveal-delay', `${Math.min(80 * index, 520)}ms`);
       item.dataset.productId = coin.productId;
       item.innerHTML = `
         <span class="coin-icon" data-icon="${coin.symbol}">${coin.icon}</span>
